@@ -29,13 +29,13 @@ public class AsterixService {
                 .toList();
     }
 
-    public AsterixCharacter getCharacterById(String id) {
+    public AsterixCharacterDTO getCharacterById(String id) {
         AsterixCharacter temp = repo.findById(id).orElseThrow();
         AsterixCharacterDTO dto = new AsterixCharacterDTO(
                 temp.name(),
                 temp.age(),
                 temp.job());
-        return temp;
+        return dto;
     }
 
     public AsterixCharacter createCharacter(AsterixCharacterDTO dto) {

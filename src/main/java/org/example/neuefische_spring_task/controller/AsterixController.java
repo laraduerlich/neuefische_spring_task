@@ -39,7 +39,7 @@ public class AsterixController {
     }
 
     @GetMapping("/{id}")
-    public AsterixCharacter getCharacterById(@PathVariable String id) {
+    public AsterixCharacterDTO getCharacterById(@PathVariable String id) {
         return service.getCharacterById(id);
     }
 
