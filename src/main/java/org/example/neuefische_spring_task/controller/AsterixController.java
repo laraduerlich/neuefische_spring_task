@@ -1,20 +1,21 @@
 package org.example.neuefische_spring_task.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.example.neuefische_spring_task.model.AsterixCharacter;
+import org.example.neuefische_spring_task.model.AsterixCharacterDTO;
 import org.example.neuefische_spring_task.repo.AsterixRepo;
+import org.example.neuefische_spring_task.service.AsterixService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/asterix")
+@RequiredArgsConstructor
 public class AsterixController {
 
-    private AsterixRepo asterixRepo;
-
-    public AsterixController(AsterixRepo asterixRepo) {
-        this.asterixRepo = asterixRepo;
-    }
+    private final AsterixService service;
 
 //    @GetMapping("/characters")
 //    public List<AsterixCharacter> getCharacters() {
@@ -32,30 +33,28 @@ public class AsterixController {
 //        );
 //    }
 
-    @GetMapping("{id}")
-    public AsterixCharacter getAsterixCharacterById(@PathVariable String id) {
-        return asterixRepo.findById(id).orElseThrow();
+    @GetMapping
+    public List<AsterixCharacterDTO> getAllCharacters() {
+        return service.getAllCharacters();
+    }
+
+    @GetMapping("/{id}")
+    public AsterixCharacter getCharacterById(@PathVariable String id) {
+        return service.getCharacterById(id);
     }
 
     @PostMapping
-    public AsterixCharacter addAsterixCharacter(@RequestBody AsterixCharacter asterixCharacter) {
-        return asterixRepo.save(asterixCharacter);
+    public AsterixCharacter createCharacter(@RequestBody AsterixCharacterDTO character) {
+        return service.createCharacter(character);
     }
 
-    @PutMapping("{id}")
-    public AsterixCharacter updateAsterixCharacter(@PathVariable String id, @RequestBody AsterixCharacter asterixCharacter) {
-        AsterixCharacter updateCharacter = asterixRepo.findById(id).orElseThrow();
-        updateCharacter = updateCharacter.withId(asterixCharacter.id());
-        updateCharacter = updateCharacter.withName(asterixCharacter.name());
-        updateCharacter = updateCharacter.withAge(asterixCharacter.age());
-        updateCharacter = updateCharacter.withJob(asterixCharacter.job());
-
-        return updateCharacter;
+    @PutMapping("/{id}")
+    public AsterixCharacter updateCharacter(@RequestBody AsterixCharacter character, @PathVariable String id) {
+      return service.updateCharacter(character, id);
     }
 
-    @DeleteMapping
-    public String deleteAsterixCharacter(@RequestBody AsterixCharacter asterixCharacter) {
-        asterixRepo.delete(asterixCharacter);
-        return "Successfully deleted";
+    @DeleteMapping("/{id}")
+    public void deleteCharacter(@PathVariable String id) {
+        service.deleteCharacter(id);
     }
 }
