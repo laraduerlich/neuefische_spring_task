@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 @RequiredArgsConstructor
 public class AsterixService {
 
     private final AsterixRepo repo;
+    private final IdService idService;
 
     public List<AsterixCharacterDTO> getAllCharacters() {
         return repo.findAll().stream()
@@ -40,7 +39,7 @@ public class AsterixService {
 
     public AsterixCharacter createCharacter(AsterixCharacterDTO dto) {
         AsterixCharacter newCharacter = new AsterixCharacter(
-                UUID.randomUUID().toString(),
+                idService.generateId(),
                 dto.name(),
                 dto.age(),
                 dto.job());
